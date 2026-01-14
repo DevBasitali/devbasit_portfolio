@@ -114,6 +114,7 @@ const projects = [
   {
     title: "HSQ Towers",
     type: "Real Estate Website",
+    category: "WordPress",
     description: "A premium real estate website showcasing luxury properties with immersive galleries and lead generation features.",
     techs: ["WordPress", "PHP", "JavaScript", "CSS3"],
     link: "https://hsqtowers.com",
@@ -122,6 +123,7 @@ const projects = [
   {
     title: "HSQ Tower CRM",
     type: "CRM System",
+    category: "MERN Stack",
     description: "Custom-built CRM solution for real estate management with client tracking, deal pipelines, and reporting.",
     techs: ["MERN Stack", "MongoDB", "Express.js", "React", "Node.js"],
     link: "https://hsqtower.org",
@@ -129,15 +131,17 @@ const projects = [
   },
   {
     title: "Vorniqo Solutions",
-    type: "Agency Website",
-    description: "Modern digital agency website with dynamic animations, service showcases, and client portfolio.",
-    techs: ["WordPress", "Framer", "JavaScript", "Custom Theme"],
-    link: "https://vorniqosolutions.com",
+    type: "Framer Website",
+    category: "No-Code / Framer",
+    description: "Modern digital agency website built in Framer with smooth animations, CMS integration, and responsive design.",
+    techs: ["Framer", "Figma", "CMS", "Animations", "Responsive"],
+    link: null,
     image: "/images/vorniqosolutions.png"
   },
   {
     title: "UiDesignz",
     type: "Design Agency",
+    category: "WordPress",
     description: "Creative design agency platform featuring portfolio galleries, service pages, and project showcases.",
     techs: ["WordPress", "Custom Theme", "PHP", "CSS3"],
     link: "https://uidesignz.com",
@@ -145,15 +149,17 @@ const projects = [
   },
   {
     title: "SwiftRide",
-    type: "Mobile Application",
-    description: "Ride-sharing mobile application with real-time tracking, booking system, and payment integration.",
-    techs: ["React Native", "Node.js", "MongoDB", "Firebase"],
-    link: "https://swiftride-frontend.vercel.app/",
+    type: "Framer Website",
+    category: "No-Code / Framer",
+    description: "Sleek ride-sharing landing page converted from Figma to Framer with interactive components and micro-animations.",
+    techs: ["Framer", "Figma", "Interactions", "Landing Page"],
+    link: null,
     image: "/images/swiftride.png"
   },
   {
     title: "Mawsool",
     type: "Delivery Platform",
+    category: "MERN Stack",
     description: "Multi-vendor delivery marketplace with order management, real-time tracking, and payment integration.",
     techs: ["MERN Stack", "Redux", "Stripe", "AWS"],
     link: "https://mawsool.tech/",
@@ -323,8 +329,27 @@ function Hero() {
             <a href="#projects" className="btn btn-primary">
               View My Work <Icons.ArrowRight />
             </a>
-            <a href="#contact" className="btn btn-secondary">
-              Get In Touch
+            <a 
+              href="https://drive.google.com/file/d/13XIELbOG-Hzsei7RTvfMJUOodNJDSWBn/view?usp=drive_link" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn btn-secondary"
+            >
+              Download CV
+            </a>
+          </div>
+          <div className="hero-social">
+            <a href="https://github.com/DevBasitali" target="_blank" rel="noopener noreferrer" className="hero-social-link">
+              <Icons.GitHub />
+            </a>
+            <a href="https://www.linkedin.com/in/DevBasitali" target="_blank" rel="noopener noreferrer" className="hero-social-link">
+              <Icons.LinkedIn />
+            </a>
+            <a href="https://www.facebook.com/share/1C2VtrmruY/" target="_blank" rel="noopener noreferrer" className="hero-social-link">
+              <Icons.Facebook />
+            </a>
+            <a href="mailto:rajaalix2022@gmail.com" className="hero-social-link">
+              <Icons.Mail />
             </a>
           </div>
           <div className="hero-stats">
@@ -426,6 +451,14 @@ function Skills() {
 
 // Projects Component
 function Projects() {
+  const [activeFilter, setActiveFilter] = useState('All')
+  
+  const categories = ['All', 'No-Code / Framer', 'MERN Stack', 'WordPress']
+  
+  const filteredProjects = activeFilter === 'All' 
+    ? projects 
+    : projects.filter(p => p.category === activeFilter)
+
   return (
     <section className="projects section" id="projects">
       <div className="container">
@@ -433,8 +466,19 @@ function Projects() {
           <div className="section-subtitle">My Work</div>
           <h2 className="section-title">Featured <span className="gradient-text">Projects</span></h2>
         </div>
+        <div className="project-filters">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              className={`filter-btn ${activeFilter === cat ? 'active' : ''}`}
+              onClick={() => setActiveFilter(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
         <div className="projects-grid">
-          {projects.map((project, i) => (
+          {filteredProjects.map((project, i) => (
             <div key={i} className="project-card glass-card">
               <div className="project-image">
                 <img src={project.image} alt={project.title} />
