@@ -329,14 +329,7 @@ function Hero() {
             <a href="#projects" className="btn btn-primary">
               View My Work <Icons.ArrowRight />
             </a>
-            <a
-              href="https://drive.google.com/file/d/13XIELbOG-Hzsei7RTvfMJUOodNJDSWBn/view?usp=drive_link"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-secondary"
-            >
-              Download CV
-            </a>
+
           </div>
           <div className="hero-social">
             <a href="https://github.com/DevBasitali" target="_blank" rel="noopener noreferrer" className="hero-social-link">
@@ -378,13 +371,7 @@ function About() {
     <section className="about section" id="about">
       <div className="container">
         <div className="about-grid">
-          <div className="about-image">
-            <div className="about-image-wrapper">
-              <div className="about-image-inner">
-                <img src="/images/Basitali.png" alt="Basit Ali" className="about-avatar-img" />
-              </div>
-            </div>
-          </div>
+
           <div className="about-content">
             <h2>About <span className="gradient-text">Me</span></h2>
             <p className="about-text">
