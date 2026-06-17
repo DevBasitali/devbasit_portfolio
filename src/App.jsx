@@ -322,7 +322,7 @@ function Hero() {
             ))}
           </div>
           <p className="hero-description">
-            A passionate Full-Stack Developer with 2.5+ years of experience crafting exceptional digital experiences.
+            A passionate Full-Stack Developer with 2+ years of experience crafting exceptional digital experiences.
             I specialize in transforming creative visions into high-performance web and mobile applications.
           </p>
           <div className="hero-buttons">
@@ -347,7 +347,7 @@ function Hero() {
           </div>
           <div className="hero-stats">
             <div className="hero-stat">
-              <div className="hero-stat-number">2.5+</div>
+              <div className="hero-stat-number">2+</div>
               <div className="hero-stat-label">Years Experience</div>
             </div>
             <div className="hero-stat">
@@ -387,7 +387,7 @@ function About() {
             <div className="about-highlights">
               <div className="about-highlight">
                 <div className="about-highlight-icon"><Icons.Briefcase /></div>
-                <div className="about-highlight-text">2.5+ Years Experience</div>
+                <div className="about-highlight-text">2+ Years Experience</div>
               </div>
               <div className="about-highlight">
                 <div className="about-highlight-icon"><Icons.Award /></div>
