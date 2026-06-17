@@ -116,58 +116,75 @@ const Icons = {
 // Project data
 const projects = [
   {
-    title: "HSQ Towers",
-    type: "Real Estate Website",
-    category: "WordPress",
-    description: "A premium real estate website showcasing luxury properties with immersive galleries and lead generation features.",
-    techs: ["WordPress", "PHP", "JavaScript", "CSS3"],
-    link: "https://hsqtowers.com",
-    image: "/images/hsqwebsite.png"
+    title: "Mawsool",
+    type: "Delivery Platform",
+    category: "Web App",
+    description: "Multi-vendor delivery marketplace with order management, real-time tracking, and payment integration.",
+    techs: ["PERN Stack", "PostgreSQL", "Express", "React", "Node.js", "AWS", "S3", "Docker", "CI/CD"],
+    link: "https://mawsool.tech/",
+    image: "/images/mawsool.png"
   },
   {
     title: "HSQ Tower CRM",
     type: "CRM System",
-    category: "MERN Stack",
+    category: "Web App",
     description: "Custom-built CRM solution for real estate management with client tracking, deal pipelines, and reporting.",
-    techs: ["MERN Stack", "MongoDB", "Express.js", "React", "Node.js"],
+    techs: ["PERN Stack", "PostgreSQL", "Express", "React", "Node.js", "AWS", "S3", "Docker", "CI/CD"],
     link: "https://hsqtower.org",
     image: "/images/hsqcrm.png"
   },
   {
+    title: "SwiftRide",
+    type: "Web Application",
+    category: "Web App",
+    description: "Sleek ride-sharing landing page converted from Figma with interactive components and micro-animations.",
+    techs: ["PERN Stack", "PostgreSQL", "Express", "React", "Node.js", "AWS", "S3", "Docker", "CI/CD"],
+    link: "https://swiftride-frontend.vercel.app/",
+    image: "/images/swiftride.png"
+  },
+  {
     title: "Vorniqo Solutions",
-    type: "Framer Website",
-    category: "No-Code / Framer",
-    description: "Modern digital agency website built in Framer with smooth animations, CMS integration, and responsive design.",
-    techs: ["Framer", "Figma", "CMS", "Animations", "Responsive"],
+    type: "Web Application",
+    category: "Frontend",
+    description: "Modern digital agency website built with smooth animations and responsive design.",
+    techs: ["React", "Tailwind CSS", "Email.js", "Calendly"],
     link: "https://vorniqosolutions.com",
     image: "/images/vorniqosolutions.png"
   },
   {
     title: "UiDesignz",
     type: "Design Agency",
-    category: "WordPress",
+    category: "Frontend",
     description: "Creative design agency platform featuring portfolio galleries, service pages, and project showcases.",
-    techs: ["WordPress", "Custom Theme", "PHP", "CSS3"],
+    techs: ["React", "Tailwind CSS", "Email.js", "Calendly"],
     link: "https://uidesignz.com",
     image: "/images/uidesignz.png"
   },
   {
-    title: "SwiftRide",
-    type: "Framer Website",
-    category: "No-Code / Framer",
-    description: "Sleek ride-sharing landing page converted from Figma to Framer with interactive components and micro-animations.",
-    techs: ["Framer", "Figma", "Interactions", "Landing Page"],
-    link: "https://swiftride-frontend.vercel.app/",
-    image: "/images/swiftride.png"
+    title: "HSQ Towers",
+    type: "Real Estate Website",
+    category: "Web App",
+    description: "A premium real estate website showcasing luxury properties with immersive galleries and lead generation features.",
+    techs: ["MERN Stack", "MongoDB", "Express", "React", "Node.js", "AWS", "Nginx"],
+    link: "https://hsqtowers.com",
+    image: "/images/hsqwebsite.png"
   },
   {
-    title: "Mawsool",
-    type: "Delivery Platform",
-    category: "MERN Stack",
-    description: "Multi-vendor delivery marketplace with order management, real-time tracking, and payment integration.",
-    techs: ["MERN Stack", "Redux", "Stripe", "AWS"],
-    link: "https://mawsool.tech/",
-    image: "/images/mawsool.png"
+    title: "Swift Ride Mobile App",
+    type: "Mobile Application",
+    category: "Mobile App",
+    description: "A comprehensive cross-platform mobile application suite with a seamless user experience.",
+    techs: ["React Native", "MongoDB", "TypeScript", "Expo"],
+    link: "#",
+    images: [
+      "/images/app1.jpg",
+      "/images/app2.jpg",
+      "/images/app3.jpg",
+      "/images/app4.jpg",
+      "/images/app5.jpg",
+      "/images/app6.jpg",
+      "/images/app7.jpg"
+    ]
   }
 ]
 
@@ -583,11 +600,79 @@ function Skills() {
   )
 }
 
+// Project Card Component
+function ProjectCard({ project }) {
+  const [imgIndex, setImgIndex] = useState(0)
+
+  const isCarousel = Array.isArray(project.images) && project.images.length > 0
+
+  const nextImg = (e) => {
+    e.preventDefault();
+    if (isCarousel) setImgIndex((prev) => (prev + 1) % project.images.length)
+  }
+
+  const prevImg = (e) => {
+    e.preventDefault();
+    if (isCarousel) setImgIndex((prev) => (prev === 0 ? project.images.length - 1 : prev - 1))
+  }
+
+  return (
+    <div className="project-card glass-card">
+      <div className="project-image" style={{ position: 'relative' }}>
+        {isCarousel ? (
+          <>
+            <img src={project.images[imgIndex]} alt={`${project.title} screenshot ${imgIndex + 1}`} />
+            {project.images.length > 1 && (
+              <div className="carousel-controls" style={{
+                position: 'absolute', top: '50%', left: 0, right: 0, 
+                display: 'flex', justifyContent: 'space-between', 
+                transform: 'translateY(-50%)', padding: '0 8px', pointerEvents: 'none'
+              }}>
+                <button onClick={prevImg} style={{
+                  background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none',
+                  borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto',
+                  transition: 'background 0.3s'
+                }} onMouseOver={(e)=>e.target.style.background='rgba(0,0,0,0.8)'} onMouseOut={(e)=>e.target.style.background='rgba(0,0,0,0.5)'}>&#10094;</button>
+                <button onClick={nextImg} style={{
+                  background: 'rgba(0,0,0,0.5)', color: 'white', border: 'none',
+                  borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'auto',
+                  transition: 'background 0.3s'
+                }} onMouseOver={(e)=>e.target.style.background='rgba(0,0,0,0.8)'} onMouseOut={(e)=>e.target.style.background='rgba(0,0,0,0.5)'}>&#10095;</button>
+              </div>
+            )}
+          </>
+        ) : (
+          <img src={project.image} alt={project.title} />
+        )}
+      </div>
+      <div className="project-content">
+        <div className="project-type">{project.type}</div>
+        <h3 className="project-title">{project.title}</h3>
+        <p className="project-description">{project.description}</p>
+        <div className="project-techs">
+          {project.techs.map((tech, j) => (
+            <span key={j} className="project-tech">{tech}</span>
+          ))}
+        </div>
+        <div className="project-links">
+          {project.link && (
+            <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
+              <Icons.ExternalLink /> Live Demo
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // Projects Component
 function Projects() {
   const [activeFilter, setActiveFilter] = useState('All')
 
-  const categories = ['All', 'No-Code / Framer', 'MERN Stack', 'WordPress']
+  const categories = ['All', 'Web App', 'Frontend', 'Mobile App']
 
   const filteredProjects = activeFilter === 'All'
     ? projects
@@ -613,28 +698,7 @@ function Projects() {
         </div>
         <div className="projects-grid">
           {filteredProjects.map((project, i) => (
-            <div key={i} className="project-card glass-card">
-              <div className="project-image">
-                <img src={project.image} alt={project.title} />
-              </div>
-              <div className="project-content">
-                <div className="project-type">{project.type}</div>
-                <h3 className="project-title">{project.title}</h3>
-                <p className="project-description">{project.description}</p>
-                <div className="project-techs">
-                  {project.techs.map((tech, j) => (
-                    <span key={j} className="project-tech">{tech}</span>
-                  ))}
-                </div>
-                <div className="project-links">
-                  {project.link && (
-                    <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link">
-                      <Icons.ExternalLink /> Live Demo
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
+            <ProjectCard key={i} project={project} />
           ))}
         </div>
       </div>

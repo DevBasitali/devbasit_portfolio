@@ -760,7 +760,7 @@ button {
 
 .project-image {
   height: 200px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  background: #1A1B26;
   position: relative;
   overflow: hidden;
 }
@@ -768,7 +768,8 @@ button {
 .project-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 16px;
   transition: transform var(--transition-base);
 }
 
