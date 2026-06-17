@@ -1,4 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Points, PointMaterial, Icosahedron, Torus } from '@react-three/drei'
+import * as THREE from 'three'
+import gsap from 'gsap'
 
 // Icons as SVG components for better performance
 const Icons = {
@@ -291,8 +295,106 @@ function Navbar({ theme, toggleTheme }) {
   )
 }
 
+// 3D Block 1: Particle Field Background
+function ParticleField({ isDark }) {
+  const ref = useRef()
+  const { mouse } = useThree()
+  
+  const [positions] = useState(() => {
+    const pos = new Float32Array(2500 * 3)
+    for (let i = 0; i < 2500; i++) {
+      pos[i * 3] = (Math.random() - 0.5) * 20
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 20
+      pos[i * 3 + 2] = (Math.random() - 0.5) * 10 - 5
+    }
+    return pos
+  })
+
+  const materialRef = useRef()
+  useEffect(() => {
+    if (materialRef.current) {
+      const targetColor = isDark ? '#9F7AEA' : '#6D28D9'
+      gsap.to(materialRef.current.color, {
+        r: new THREE.Color(targetColor).r,
+        g: new THREE.Color(targetColor).g,
+        b: new THREE.Color(targetColor).b,
+        duration: 1,
+        ease: 'power2.out'
+      })
+    }
+  }, [isDark])
+
+  useFrame(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (ref.current) {
+      ref.current.rotation.x = THREE.MathUtils.lerp(ref.current.rotation.x, mouse.y * 0.1, 0.05)
+      ref.current.rotation.y = THREE.MathUtils.lerp(ref.current.rotation.y, mouse.x * 0.1, 0.05)
+    }
+  })
+
+  return (
+    <Points ref={ref} positions={positions} stride={3} frustumCulled={false}>
+      <PointMaterial
+        ref={materialRef}
+        transparent
+        color={isDark ? '#9F7AEA' : '#6D28D9'}
+        size={0.05}
+        sizeAttenuation={true}
+        depthWrite={false}
+      />
+    </Points>
+  )
+}
+
+// 3D Block 2: Camera Drift Rig
+function CameraRig() {
+  useFrame((state) => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    state.camera.position.x = THREE.MathUtils.lerp(state.camera.position.x, state.mouse.x * 0.5, 0.05)
+    state.camera.position.y = THREE.MathUtils.lerp(state.camera.position.y, state.mouse.y * 0.5, 0.05)
+  })
+  return null
+}
+
+// 3D Block 3: Floating Geometry Elements
+function FloatingGeometry({ isDark }) {
+  const icoRef = useRef()
+  const torusRef = useRef()
+  const matRef1 = useRef()
+  const matRef2 = useRef()
+
+  useEffect(() => {
+    const color = new THREE.Color(isDark ? '#9F7AEA' : '#6D28D9')
+    if (matRef1.current) gsap.to(matRef1.current.color, { r: color.r, g: color.g, b: color.b, duration: 1 })
+    if (matRef2.current) gsap.to(matRef2.current.color, { r: color.r, g: color.g, b: color.b, duration: 1 })
+  }, [isDark])
+
+  useFrame(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (icoRef.current) {
+      icoRef.current.rotation.y += 0.002
+      icoRef.current.rotation.x += 0.001
+    }
+    if (torusRef.current) {
+      torusRef.current.rotation.y += 0.002
+      torusRef.current.rotation.z += 0.001
+    }
+  })
+
+  return (
+    <group position={[4, 0, -2]}>
+      <Icosahedron ref={icoRef} args={[1, 0]} position={[0, 1, 0]}>
+        <meshBasicMaterial ref={matRef1} wireframe transparent opacity={0.4} color={isDark ? '#9F7AEA' : '#6D28D9'} />
+      </Icosahedron>
+      <Torus ref={torusRef} args={[1.5, 0.4, 8, 16]} position={[1, -1, -1]} rotation={[Math.PI / 3, 0, 0]}>
+        <meshBasicMaterial ref={matRef2} wireframe transparent opacity={0.4} color={isDark ? '#9F7AEA' : '#6D28D9'} />
+      </Torus>
+    </group>
+  )
+}
+
 // Hero Component
-function Hero() {
+function Hero({ theme }) {
   const roles = [
     "MERN Stack Developer",
     "WordPress Expert",
@@ -300,38 +402,83 @@ function Hero() {
     "DevOps Engineer",
     "React Native Developer"
   ]
+  const isDark = theme === 'dark'
+  const heroRef = useRef(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    const ctx = gsap.context(() => {
+      // 3D Block 5: Entrance Animation
+      gsap.fromTo('.hero-anim', 
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.1, ease: 'power3.out' }
+      )
+      
+      if (!isMobile) {
+        gsap.fromTo('.hero-canvas-container',
+          { opacity: 0 },
+          { opacity: 1, duration: 1, delay: 0.5 }
+        )
+      }
+    }, heroRef)
+
+    return () => ctx.revert()
+  }, [isMobile])
 
   return (
-    <section className="hero" id="home">
+    <section className="hero" id="home" ref={heroRef} style={{ position: 'relative', overflow: 'hidden' }}>
       <div className="hero-bg">
         <div className="hero-gradient-1"></div>
         <div className="hero-gradient-2"></div>
       </div>
-      <div className="container">
+
+      {!isMobile && (
+        <div className="hero-canvas-container" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
+          <Canvas dpr={[1, 1.5]} camera={{ position: [0, 0, 5], fov: 75 }}>
+            <Suspense fallback={null}>
+              <ParticleField isDark={isDark} />
+              <FloatingGeometry isDark={isDark} />
+              <CameraRig />
+            </Suspense>
+          </Canvas>
+        </div>
+      )}
+
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
         <div className="hero-content">
-          <div className="hero-badge">
+          <div className="hero-badge hero-anim">
             <span className="hero-badge-dot"></span>
             Available for new opportunities
           </div>
-          <h1 className="hero-title">
-            Hi, I'm <span className="gradient-text">Basit Ali</span>
+          {/* 3D Block 4: "Basit Ali" name CSS text-shadow glow */}
+          <h1 className="hero-title hero-anim">
+            Hi, I'm <span className="gradient-text" style={{ textShadow: isDark ? '0 0 20px rgba(159, 122, 234, 0.5)' : '0 0 20px rgba(109, 40, 217, 0.3)', transition: 'text-shadow 1s' }}>Basit Ali</span>
           </h1>
-          <div className="hero-roles">
+          <div className="hero-roles hero-anim">
             {roles.map((role, i) => (
               <span key={i} className="hero-role gradient-text">{role}</span>
             ))}
           </div>
-          <p className="hero-description">
+          <p className="hero-description hero-anim">
             A passionate Full-Stack Developer with 2+ years of experience crafting exceptional digital experiences.
             I specialize in transforming creative visions into high-performance web and mobile applications.
           </p>
-          <div className="hero-buttons">
+          <div className="hero-buttons hero-anim">
             <a href="#projects" className="btn btn-primary">
               View My Work <Icons.ArrowRight />
             </a>
 
           </div>
-          <div className="hero-social">
+          <div className="hero-social hero-anim">
             <a href="https://github.com/DevBasitali" target="_blank" rel="noopener noreferrer" className="hero-social-link">
               <Icons.GitHub />
             </a>
@@ -345,7 +492,7 @@ function Hero() {
               <Icons.Mail />
             </a>
           </div>
-          <div className="hero-stats">
+          <div className="hero-stats hero-anim">
             <div className="hero-stat">
               <div className="hero-stat-number">2+</div>
               <div className="hero-stat-label">Years Experience</div>
@@ -656,7 +803,7 @@ function App() {
   return (
     <>
       <Navbar theme={theme} toggleTheme={toggleTheme} />
-      <Hero />
+      <Hero theme={theme} />
       <About />
       <Skills />
       <Projects />
