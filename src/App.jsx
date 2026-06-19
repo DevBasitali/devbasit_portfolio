@@ -226,16 +226,6 @@ const skills = [
 // Services data
 const services = [
   {
-    icon: <Icons.Figma />,
-    title: "Figma to Framer",
-    description: "Pixel-perfect conversion of your Figma designs to fully functional, interactive Framer websites with animations and CMS integration."
-  },
-  {
-    icon: <Icons.Layout />,
-    title: "Figma to WordPress",
-    description: "Transform your Figma mockups into custom WordPress themes with full admin control, SEO optimization, and plugin integration."
-  },
-  {
     icon: <Icons.Code />,
     title: "Full-Stack Development",
     description: "End-to-end MERN stack applications with modern architecture, scalable database design, and secure API development."
@@ -735,7 +725,7 @@ function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const mailtoLink = `mailto:rajaalix2022@gmail.com?subject=Portfolio Contact from ${formData.name}&body=${encodeURIComponent(formData.message)}%0A%0AFrom: ${formData.email}`
+    const mailtoLink = `mailto:ibasitaliraja@gmail.com?subject=Portfolio Contact from ${formData.name}&body=${encodeURIComponent(formData.message)}%0A%0AFrom: ${formData.email}`
     window.open(mailtoLink)
   }
 
@@ -754,7 +744,7 @@ function Contact() {
                 <div className="contact-method-icon"><Icons.Mail /></div>
                 <div className="contact-method-content">
                   <h4>Email</h4>
-                  <p><a href="mailto:rajaalix2022@gmail.com">rajaalix2022@gmail.com</a></p>
+                  <p><a href="mailto:ibasitaliraja@gmail.com">ibasitaliraja@gmail.com</a></p>
                 </div>
               </div>
               <div className="contact-method">
@@ -831,7 +821,7 @@ function Footer() {
             <a href="https://www.facebook.com/share/1C2VtrmruY/" target="_blank" rel="noopener noreferrer" className="footer-social-link">
               <Icons.Facebook />
             </a>
-            <a href="mailto:rajaalix2022@gmail.com" className="footer-social-link">
+            <a href="mailto:ibasitaliraja@gmail.com" className="footer-social-link">
               <Icons.Mail />
             </a>
           </div>
