@@ -403,11 +403,9 @@ function FloatingGeometry({ isDark }) {
 // Hero Component
 function Hero({ theme }) {
   const roles = [
-    "MERN Stack Developer",
-    "WordPress Expert",
-    "Framer Specialist",
-    "DevOps Engineer",
-    "React Native Developer"
+    "Full Stack Engineer",
+    "Cloud Deployment",
+    "React Native & Flutter Developer"
   ]
   const isDark = theme === 'dark'
   const heroRef = useRef(null)
